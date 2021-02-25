@@ -43,6 +43,7 @@ class AudioFileDetail(MethodView):
         
 
     def delete(self, filetype, fid):
+        table_exists(self.db, filetype)
         query = self.db.execute(
             'SELECT * FROM {} WHERE id = ?'.format(filetype), (fid,)
         ).fetchone()
@@ -58,6 +59,7 @@ class AudioFileDetail(MethodView):
 
 
     def put(self, filetype, fid):
+        table_exists(self.db, filetype)
         item = self.db.execute(
             'SELECT * FROM {} WHERE id = ?'.format(filetype), (fid,)
         ).fetchone()
