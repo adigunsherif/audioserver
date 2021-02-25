@@ -6,10 +6,12 @@ from flaskr.db import get_db
 def test_audio_file_detail_success(client):
     response = client.get('/song/1')
     assert response.status_code == 200
+    assert b'name_of_song' in response.data
 
 def test_audio_file_detail_fail(client):
     response = client.get('/song/4')
     assert response.status_code == 400
+    assert b'Invalid request' in response.data
 
 
 def test_audio_file_delete_success(client, app):
