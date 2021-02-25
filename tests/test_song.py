@@ -12,9 +12,15 @@ def test_audio_file_detail_fail(client):
     assert response.status_code == 400
 
 
-def test_audio_file_delete_success(client):
+def test_audio_file_delete_success(client, app):
     response = client.delete('/song/1')
     assert response.status_code == 200
+
+    with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM song').fetchone()[0]
+        assert count == 1
+
 
 def test_audio_file_delete_fail(client):
     response = client.delete('/sonjskdg/1')
@@ -47,9 +53,14 @@ def test_audio_file_update_fail(client):
     assert response.status_code == 400
 
 
-def test_audio_file_list_success(client):
+def test_audio_file_list_success(client, app):
     response = client.get('song/')
     assert response.status_code == 200
+
+    with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM song').fetchone()[0]
+        assert count == 2
 
 
 def test_audio_file_list_fail(client):
@@ -58,7 +69,7 @@ def test_audio_file_list_fail(client):
 
 
 
-def test_audio_file_create_success(client):
+def test_audio_file_create_success(client, app):
     data = {
         "audioFileType": "song",
         "audioFileMetadata": {
@@ -70,6 +81,11 @@ def test_audio_file_create_success(client):
     }
     response = client.post('/', data=json.dumps(data))
     assert response.status_code == 200
+
+    with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM song').fetchone()[0]
+        assert count == 3
 
 
 def test_audio_file_create_fail(client):
