@@ -2,7 +2,7 @@ import pytest
 from flaskr.db import get_db
 
 
-def test_audio_detail(client, auth):
+def test_audio_list(client, auth):
     response = client.get('/')
     assert b"Log In" in response.data
     assert b"Register" in response.data
